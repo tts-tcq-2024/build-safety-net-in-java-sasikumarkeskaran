@@ -8,6 +8,10 @@ public class Soundex {
     private static final Map<Character, Character> soundexMap = new HashMap<>();
 
     static {
+        initializeSoundexMap();
+    }
+
+    private static void initializeSoundexMap() {
         soundexMap.put('B', '1');
         soundexMap.put('F', '1');
         soundexMap.put('P', '1');
@@ -29,7 +33,7 @@ public class Soundex {
     }
 
     public static String generateSoundex(String name) {
-        if (name == null || name.isEmpty()) {
+        if (isNullOrEmpty(name)) {
             return "";
         }
 
@@ -41,6 +45,10 @@ public class Soundex {
         padWithZeros(soundex);
 
         return soundex.toString();
+    }
+
+    private static boolean isNullOrEmpty(String name) {
+        return name == null || name.isEmpty();
     }
 
     private static void processCharacters(String name, StringBuilder soundex) {
