@@ -36,33 +36,27 @@ public class Soundex {
         StringBuilder soundex = new StringBuilder();
         soundex.append(Character.toUpperCase(name.charAt(0)));
 
-        String encodedName = encodeName(name);
-        appendEncodedCharacters(soundex, encodedName);
+        processCharacters(name, soundex);
 
         padWithZeros(soundex);
 
         return soundex.toString();
     }
 
-    private static String encodeName(String name) {
-        StringBuilder encoded = new StringBuilder();
+    private static void processCharacters(String name, StringBuilder soundex) {
         char prevCode = getSoundexCode(name.charAt(0));
 
-        for (int i = 1; i < name.length(); i++) {
-            char code = getSoundexCode(name.charAt(i));
-            if (code != '0' && code != prevCode) {
-                encoded.append(code);
-                prevCode = code;
+        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
+            char currentCode = getSoundexCode(name.charAt(i));
+            if (shouldAppendCode(currentCode, prevCode)) {
+                soundex.append(currentCode);
+                prevCode = currentCode;
             }
         }
-
-        return encoded.toString();
     }
 
-    private static void appendEncodedCharacters(StringBuilder soundex, String encodedName) {
-        for (int i = 0; i < encodedName.length() && soundex.length() < 4; i++) {
-            soundex.append(encodedName.charAt(i));
-        }
+    private static boolean shouldAppendCode(char currentCode, char prevCode) {
+        return currentCode != '0' && currentCode != prevCode;
     }
 
     private static void padWithZeros(StringBuilder soundex) {
