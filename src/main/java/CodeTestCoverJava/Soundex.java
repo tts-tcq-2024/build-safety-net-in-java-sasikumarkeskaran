@@ -1,20 +1,12 @@
-
 package CodeTestCoverJava;
+
 public class Soundex {
-      public static String getSoundexCode(char c) {
-        c = Character.toUpperCase(c);
+    private static final int[] ALPHA_MAPPING = {
+        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
+        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
+        0, 1, 0, 2, 0, 2
+    };
 
-        int ans = 0;
-
-        ans = getMatchingSoundexNumericalDigit((c == 'B' || c == 'F' || c == 'P' || c == 'V'), ans, 1);
-        ans = getMatchingSoundexNumericalDigit((c == 'C' || c == 'G' || c == 'J' || c == 'K' || c == 'Q' || c == 'S' || c == 'X' || c == 'Z'), ans, 2);
-        ans = getMatchingSoundexNumericalDigit((c == 'D' || c == 'T'), ans, 3);
-        ans = getMatchingSoundexNumericalDigit((c == 'L'), ans, 4);
-        ans = getMatchingSoundexNumericalDigit((c == 'M' || c == 'N'), ans, 5);
-        ans = getMatchingSoundexNumericalDigit((c == 'R'), ans, 6);
-
-        return ans == 0 ? '0' : Character.forDigit(ans, 10);
-    }
     private static char getSoundexCode(char c) {
         c = Character.toUpperCase(c);
         if (c < 'A' || c > 'Z') {
@@ -55,5 +47,4 @@ public class Soundex {
         finalizeSoundex(soundex);
         return soundex.toString();
     }
-
 }
