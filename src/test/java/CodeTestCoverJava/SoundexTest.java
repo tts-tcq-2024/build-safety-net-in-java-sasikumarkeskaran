@@ -2,17 +2,17 @@ package CodeTestCoverJava;
 
 import static org.junit.Assert.assertTrue;
 
+
 import org.junit.Test;
 
 public class SoundexTest {
 
-    @Test
-    public void testEmptyString() {
-       //  assertTrue(Soundex.generateSoundex("")=="");
+
+ @Test
+    public void testNames() {
+        assertTrue("case 1", Soundex.generateSoundex("Ashcraft").equals("A261"));
+        assertTrue("case 2", Soundex.generateSoundex("Rubin").equals("R150"));
     }
 
-    @Test
-    public void testSingleCharacter() {
-         //assertTrue(Soundex.generateSoundex("A")=="A000");
-    }
+
 }

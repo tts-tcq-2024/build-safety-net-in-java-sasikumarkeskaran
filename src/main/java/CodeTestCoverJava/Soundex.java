@@ -1,48 +1,56 @@
 package CodeTestCoverJava;
 
 public class Soundex {
-
-    public static String generateSoundex(String name) {
-        if (name == null || name.isEmpty()) {
-            return "";
-        }
-
-        StringBuilder soundex = new StringBuilder();
-        soundex.append(Character.toUpperCase(name.charAt(0)));
-        char prevCode = getSoundexCode(name.charAt(0));
-
-        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char code = getSoundexCode(name.charAt(i));
-            if (code != '0' && code != prevCode) {
-                soundex.append(code);
-                prevCode = code;
-            }
-        }
-
-        while (soundex.length() < 4) {
-            soundex.append('0');
-        }
-
-        return soundex.toString();
-    }
+    private static final int[] ALPHA_MAPPING = {
+        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
+        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
+        0, 1, 0, 2, 0, 2
+    };
 
     private static char getSoundexCode(char c) {
         c = Character.toUpperCase(c);
-        switch (c) {
-            case 'B': case 'F': case 'P': case 'V':
-                return '1';
-            case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z':
-                return '2';
-            case 'D': case 'T':
-                return '3';
-            case 'L':
-                return '4';
-            case 'M': case 'N':
-                return '5';
-            case 'R':
-                return '6';
-            default:
-                return '0'; // For A, E, I, O, U, H, W, Y
+        if (c < 'A' || c > 'Z') {
+            return '0';
         }
+        return (char) (ALPHA_MAPPING[c - 'A'] + '0');
+    }
+
+    private static void appendSoundexCode(char code, StringBuilder soundex) {
+        if (code != '0' && code != soundex.charAt(soundex.length() - 1)) {
+            soundex.append(code);
+        }
+    }
+
+    private static void finalizeSoundex(StringBuilder soundex) {
+        while (soundex.length() < 4) {
+            soundex.append('0');
+        }
+        if (soundex.length() > 4) {
+            soundex.setLength(4);
+        }
+    }
+
+    private static void initializeSoundex(String name, StringBuilder soundex) {
+        soundex.append(Character.toUpperCase(name.charAt(0)));
+    }
+
+    private static void processName(String name, StringBuilder soundex) {
+        int len = name.length();
+        for (int i = 1; i < len && soundex.length() < 4; i++) {
+            char code = getSoundexCode(name.charAt(i));
+            appendSoundexCode(code, soundex);
+        }
+    }
+
+public static String generateSoundex(String name) {
+        if (name == null || name.isEmpty()) {
+            return "0000";
+        }
+
+        StringBuilder soundex = new StringBuilder();
+        initializeSoundex(name, soundex);
+        processName(name, soundex);
+        finalizeSoundex(soundex);
+        return soundex.toString();
     }
 }
