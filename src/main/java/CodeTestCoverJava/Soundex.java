@@ -1,48 +1,59 @@
+
 package CodeTestCoverJava;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class Soundex {
+      public static String getSoundexCode(char c) {
+        c = Character.toUpperCase(c);
 
-    private static final Map<Character, Character> SOUND_CODE_MAP = new HashMap<>();
+        int ans = 0;
 
-    static {
-        SOUND_CODE_MAP.put('B', '1'); SOUND_CODE_MAP.put('F', '1'); SOUND_CODE_MAP.put('P', '1'); SOUND_CODE_MAP.put('V', '1');
-        SOUND_CODE_MAP.put('C', '2'); SOUND_CODE_MAP.put('G', '2'); SOUND_CODE_MAP.put('J', '2'); SOUND_CODE_MAP.put('K', '2');
-        SOUND_CODE_MAP.put('Q', '2'); SOUND_CODE_MAP.put('S', '2'); SOUND_CODE_MAP.put('X', '2'); SOUND_CODE_MAP.put('Z', '2');
-        SOUND_CODE_MAP.put('D', '3'); SOUND_CODE_MAP.put('T', '3');
-        SOUND_CODE_MAP.put('L', '4');
-        SOUND_CODE_MAP.put('M', '5'); SOUND_CODE_MAP.put('N', '5');
-        SOUND_CODE_MAP.put('R', '6');
+        ans = getMatchingSoundexNumericalDigit((c == 'B' || c == 'F' || c == 'P' || c == 'V'), ans, 1);
+        ans = getMatchingSoundexNumericalDigit((c == 'C' || c == 'G' || c == 'J' || c == 'K' || c == 'Q' || c == 'S' || c == 'X' || c == 'Z'), ans, 2);
+        ans = getMatchingSoundexNumericalDigit((c == 'D' || c == 'T'), ans, 3);
+        ans = getMatchingSoundexNumericalDigit((c == 'L'), ans, 4);
+        ans = getMatchingSoundexNumericalDigit((c == 'M' || c == 'N'), ans, 5);
+        ans = getMatchingSoundexNumericalDigit((c == 'R'), ans, 6);
+
+        return ans == 0 ? '0' : Character.forDigit(ans, 10);
+    }
+    private static char getSoundexCode(char c) {
+        c = Character.toUpperCase(c);
+        if (c < 'A' || c > 'Z') {
+            return '0';
+        }
+        return (char) (ALPHA_MAPPING[c - 'A'] + '0');
+    }
+
+    private static void appendSoundexCode(char code, StringBuilder soundex) {
+        if (code != '0' && code != soundex.charAt(soundex.length() - 1)) {
+            soundex.append(code);
+        }
+    }
+
+    private static void finalizeSoundex(StringBuilder soundex) {
+        while (soundex.length() < 4) {
+            soundex.append('0');
+        }
+        if (soundex.length() > 4) {
+            soundex.setLength(4);
+        }
     }
 
     public static String generateSoundex(String name) {
         if (name == null || name.isEmpty()) {
-            return "";
+            return "0000";
         }
 
         StringBuilder soundex = new StringBuilder();
         soundex.append(Character.toUpperCase(name.charAt(0)));
-        char prevCode = getSoundexCode(name.charAt(0));
+        int len = name.length();
 
-        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
+        for (int i = 1; i < len && soundex.length() < 4; i++) {
             char code = getSoundexCode(name.charAt(i));
-            if (code != '0' && code != prevCode) {
-                soundex.append(code);
-                prevCode = code;
-            }
+            appendSoundexCode(code, soundex);
         }
 
-        while (soundex.length() < 4) {
-            soundex.append('0');
-        }
-
+        finalizeSoundex(soundex);
         return soundex.toString();
-    }
-
-    private static char getSoundexCode(char c) {
-        return SOUND_CODE_MAP.getOrDefault(Character.toUpperCase(c), '0');
     }
 
 }
