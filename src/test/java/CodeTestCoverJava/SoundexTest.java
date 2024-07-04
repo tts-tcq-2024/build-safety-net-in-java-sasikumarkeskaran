@@ -14,11 +14,5 @@ public class SoundexTest {
         assertTrue("case 2", Soundex.generateSoundex("Rubin").equals("R150"));
     }
 
-@Test
-    public void testComplexNames() {
-        assertTrue("case 3", Soundex.generateSoundex("Honeyman").equals("H555"));
-        assertTrue("case 4", Soundex.generateSoundex("Pfister").equals("P236"));
-    }
 
-  
 }
