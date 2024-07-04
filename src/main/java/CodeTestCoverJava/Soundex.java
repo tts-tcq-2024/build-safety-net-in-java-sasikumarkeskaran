@@ -30,6 +30,18 @@ public class Soundex {
         }
     }
 
+    private static void initializeSoundex(String name, StringBuilder soundex) {
+        soundex.append(Character.toUpperCase(name.charAt(0)));
+    }
+
+    private static void processName(String name, StringBuilder soundex) {
+        int len = name.length();
+        for (int i = 1; i < len && soundex.length() < 4; i++) {
+            char code = getSoundexCode(name.charAt(i));
+            appendSoundexCode(code, soundex);
+        }
+    }
+
 public static String generateSoundex(String name) {
         if (name == null || name.isEmpty()) {
             return "0000";
