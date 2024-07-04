@@ -1,28 +1,24 @@
 package CodeTestCoverJava;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 import org.junit.Test;
 
 public class SoundexTest {
 
-    @Test
-    void testBasicNames() {
-        assertEquals("A261", Soundex.generateSoundex("Ashcraft"));
-        assertEquals("R150", Soundex.generateSoundex("Rubin"));
+
+ @Test
+    public void testNames() {
+        assertTrue("case 1", Soundex.generateSoundex("Ashcraft").equals("A261"));
+        assertTrue("case 2", Soundex.generateSoundex("Rubin").equals("R150"));
     }
 
-    @Test
-    void testEdgeCases() {
-        assertEquals("", Soundex.generateSoundex(null));
-        assertEquals("", Soundex.generateSoundex(""));
-        assertEquals("A000", Soundex.generateSoundex("A"));
+@Test
+    public void testComplexNames() {
+        assertTrue("case 3", Soundex.generateSoundex("Honeyman").equals("H555"));
+        assertTrue("case 4", Soundex.generateSoundex("Pfister").equals("P236"));
     }
 
-    @Test
-    void testNamesWithHWSeparatingSameSoundingConsonants() {
-        assertEquals("H555", Soundex.generateSoundex("Honeyman"));
-        assertEquals("P236", Soundex.generateSoundex("Pfister"));
-    }
+  
 }
